@@ -3,17 +3,17 @@ namespace tabuleiro
 {
     class Peca
     {
-        public Posicao Posicao { get; set; }
-        public Cor Cor { get; protected set; } //somente pode ser acessada pela subclasse dela
-        public int _qteMovimentos { get; protected set; }
-        public Tabuleiro Tabuleiro { get; protected set; }
+        public Posicao posicao { get; set; }
+        public Cor cor { get; protected set; } //somente pode ser acessada por ela e pela sua subclasse
+        public int qteMovimentos { get; protected set; }
+        public Tabuleiro tab { get; protected set; }
 
-        public Peca(Posicao posicao, Tabuleiro tabuleiro, Cor cor)
+        public Peca(Posicao posicao, Tabuleiro tab, Cor cor)
         {
-            Posicao = posicao;
-            Cor = cor;            
-            Tabuleiro = tabuleiro;
-            _qteMovimentos = 0;
+            this.posicao = posicao;
+            this.cor = cor;            
+            this.tab = tab;
+            this.qteMovimentos = 0;
         }
     }
 }
