@@ -7,14 +7,6 @@ namespace tabuleiro
         public int colunas { get; set; }
         private Peca[,] pecas { get; set; }
 
-        /*public Tabuleiro(int linhas, int colunas)
-        {
-            this.linhas = linhas;
-            this.colunas = colunas;
-            //A variável Peca é criado como matriz e recebe de parâmetro as linhas e colunas
-            //do construtor.
-            pecas = new Peca[linhas, colunas]; 
-        }*/
         public Tabuleiro(int linhas, int colunas)
         {
             this.linhas = linhas;
@@ -29,6 +21,14 @@ namespace tabuleiro
         public Peca peca(int linha, int coluna)
         {
             return pecas[linha, coluna];
+        }
+
+        //Vou na matriz (acesso a matriz) de peças na posição.
+        //recebo a peça p e adiciono na matriz na posição pos.linha, pos.coluna
+        public void colocarPeca(Peca p, Posicao pos)
+        {
+            pecas[pos.Linha, pos.Coluna] = p;
+            p.posicao = pos; //vou na peça p e digo que a posição dela agora é pos
         }
 
 
