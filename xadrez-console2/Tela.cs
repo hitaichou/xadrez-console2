@@ -1,5 +1,6 @@
 ﻿using System;
 using tabuleiro;
+using xadrez;
 
 namespace xadrez_console2
 {
@@ -48,6 +49,15 @@ namespace xadrez_console2
                 Console.Write(peca); //imprimo a peça
                 Console.ForegroundColor = aux; //volto a cor de fundo original
             }
+
+        }
+
+        public static PosicaoXadrez lerPosicaoXadrez()
+        {
+            string s = Console.ReadLine(); //leio a jogada do usuário 
+            char coluna   = s[0]; //pego a letra na primeira posicao
+            int linha = int.Parse(s[1] + ""); //forço a ser string
+            return new PosicaoXadrez(coluna, linha); 
 
         }
 

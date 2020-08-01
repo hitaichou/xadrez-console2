@@ -56,6 +56,21 @@ namespace tabuleiro
             p.posicao = pos; //vou na peça p e digo que a posição dela agora é pos
         }
 
+        
+        public Peca retirarPeca(Posicao pos)
+        {   //A peça que estiver na posição e for igual a nulo
+            //significa que não existe peça nesta posição.
+            if (peca(pos) == null)
+            {
+                return null;
+            }
+
+            Peca aux = peca(pos); //variável recebe peça na posição informada
+            aux.posicao = null; //a posição dela é nula, pois ela foi retirada
+            pecas[pos.Linha, pos.Coluna] = null; //marca a posição dela como nula
+            return aux;
+        }
+
         //Método que valida se as dimensões da matriz estão corretas
         //Qualquer coisa fora dela, é para retornar erro.
         public bool posicaoValida(Posicao pos)
