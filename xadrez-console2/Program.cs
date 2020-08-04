@@ -33,6 +33,17 @@ namespace xadrez_console2
                     //Peço a origem e destino
                     Console.Write("Origem: ");
                     Posicao origem = Tela.lerPosicaoXadrez().toPosicao(); //leio a posição e transformo em posição de matriz
+
+                    
+                    //crio uma variável de matriz booleana (Sim/Não)
+                    //Recebe a partida e o tabuleiro dela
+                    //com base na posição de origem, acessa os movimentos possíveis e coloca na matriz
+                    bool[,] posicoesPossiveis = partida.tab.peca(origem).movimentosPossiveis();
+
+                    Console.Clear(); //limpo a tela
+                    Tela.imprimirTabuleiro(partida.tab, posicoesPossiveis); //imprimi as posições possíveis marcadas
+
+                    Console.WriteLine();
                     Console.Write("Destino: ");
                     Posicao destino = Tela.lerPosicaoXadrez().toPosicao();
 

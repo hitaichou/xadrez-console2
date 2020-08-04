@@ -16,6 +16,7 @@ namespace xadrez
             tab = new Tabuleiro(8, 8);
             turno = 1;
             jogadorAtual = Cor.Branca; //quem inicia a partida no xadrez é a peça branca
+            terminada = false;
             colocarPecas();
         }
 
@@ -46,7 +47,7 @@ namespace xadrez
         {
             //retira a peça da origem
             Peca p = tab.retirarPeca(origem);
-            p.incrementarQteMovimento(); //mexo a peça
+            //p.incrementarQteMovimento(); //mexo a peça
             //Controlo a captura da peça
             Peca pecaCapturada = tab.retirarPeca(destino); //retiro a peça se existir na posição destino
             tab.colocarPeca(p, destino); //coloca peça na posição destino
