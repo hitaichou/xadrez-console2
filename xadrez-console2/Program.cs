@@ -26,33 +26,43 @@ namespace xadrez_console2
 
                 while(!partida.terminada)
                 {
-                    Console.Clear();
-                    Tela.imprimirTabuleiro(partida.tab);
+                    try
+                    {                    
+                        Console.Clear();
+                        Tela.imprimirTabuleiro(partida.tab);
+                        Console.WriteLine();
+                        Console.WriteLine("Turno: " + partida.turno);
+                        Console.WriteLine("Aguardando jogada " + partida.jogadorAtual);
 
-                    Console.WriteLine();
-                    //Peço a origem e destino
-                    Console.Write("Origem: ");
-                    Posicao origem = Tela.lerPosicaoXadrez().toPosicao(); //leio a posição e transformo em posição de matriz
+                        Console.WriteLine();
+                        //Peço a origem e destino
+                        Console.Write("Origem: ");
+                        Posicao origem = Tela.lerPosicaoXadrez().toPosicao(); //leio a posição e transformo em posição de matriz
+                        partida.validarPosicaoOrigem(origem); //valida a posição.
 
                     
-                    //crio uma variável de matriz booleana (Sim/Não)
-                    //Recebe a partida e o tabuleiro dela
-                    //com base na posição de origem, acessa os movimentos possíveis e coloca na matriz
-                    bool[,] posicoesPossiveis = partida.tab.peca(origem).movimentosPossiveis();
+                        //crio uma variável de matriz booleana (Sim/Não)
+                        //Recebe a partida e o tabuleiro dela
+                        //com base na posição de origem, acessa os movimentos possíveis e coloca na matriz
+                        bool[,] posicoesPossiveis = partida.tab.peca(origem).movimentosPossiveis();
 
-                    Console.Clear(); //limpo a tela
-                    Tela.imprimirTabuleiro(partida.tab, posicoesPossiveis); //imprimi as posições possíveis marcadas
+                        Console.Clear(); //limpo a tela
+                        Tela.imprimirTabuleiro(partida.tab, posicoesPossiveis); //imprimi as posições possíveis marcadas
 
-                    Console.WriteLine();
-                    Console.Write("Destino: ");
-                    Posicao destino = Tela.lerPosicaoXadrez().toPosicao();
+                        Console.WriteLine();
+                        Console.Write("Destino: ");
+                        Posicao destino = Tela.lerPosicaoXadrez().toPosicao();
+                        partida.validaPosicaoDestino(origem, destino);//valida destino
 
-                    partida.executaMovimento(origem, destino);
+                        partida.realizaJogada(origem, destino);
+                    }
+                    catch(TabuleiroException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.ReadLine();
+                    }
 
                 }
-
-                
-
 
             }
             catch(Exception e)

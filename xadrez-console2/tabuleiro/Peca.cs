@@ -16,6 +16,29 @@ namespace tabuleiro
             this.qteMovimentos = 0;
         }
 
+        //Método de checagem se existe movimentos possíveis para a peça.
+        public bool exiteMovimentoPossiveis()
+        {
+            bool[,] mat = movimentosPossiveis();
+            for(int i = 0; i < tab.linhas; i++)
+            {
+                for(int j = 0; j < tab.colunas; j++)
+                {
+                    if(mat[i,j])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        //Diz se pode mover para uma determinada posição
+        //se a posição pos é um movimento possivel
+        public bool podeMoverPara(Posicao pos)
+        {
+            return movimentosPossiveis()[pos.Linha, pos.Coluna];
+        }
+
         /*public void incrementarQteMovimento()
         {
             qteMovimentos++;
