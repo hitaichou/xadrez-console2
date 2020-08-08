@@ -39,10 +39,10 @@ namespace tabuleiro
             return movimentosPossiveis()[pos.Linha, pos.Coluna];
         }
 
-        /*public void incrementarQteMovimento()
+        public void incrementarQteMovimento()
         {
             qteMovimentos++;
-        }*/
+        }
         
         //é boleano, pois aqui é o momento no qual
         //a matriz vai dizer qual movimento é possível fazer
