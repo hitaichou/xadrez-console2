@@ -43,7 +43,11 @@ namespace tabuleiro
         {
             qteMovimentos++;
         }
-        
+        public void decrementarQteMovimento()
+        {
+            qteMovimentos--;
+        }
+
         //é boleano, pois aqui é o momento no qual
         //a matriz vai dizer qual movimento é possível fazer
         //como no xadrez há diversas peças e seus movimentos são distintos, não é possível

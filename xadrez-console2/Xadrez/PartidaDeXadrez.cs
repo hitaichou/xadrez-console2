@@ -11,6 +11,7 @@ namespace xadrez
         public int turno { get; private set; }
         public Cor jogadorAtual { get; private set; }
         public bool terminada { get; private set;}
+        public bool xeque { get; private set; }
         //Coleção (Collection) de dados que obedece as regras de conjunto
         private HashSet<Peca> pecas; //declaração da coleção para as minhas peças
         private HashSet<Peca> capturadas; //declaração da coleção para as peças capturadas
@@ -21,6 +22,7 @@ namespace xadrez
             turno = 1;
             jogadorAtual = Cor.Branca; //quem inicia a partida no xadrez é a peça branca
             terminada = false;
+            xeque = false;
             //é preciso instanciar antes de colocar as peças
             pecas = new HashSet<Peca>();
             capturadas = new HashSet<Peca>();
@@ -45,21 +47,21 @@ namespace xadrez
             colocarNovaPeca('d', 2, new Torre(tab, Cor.Branca));
             colocarNovaPeca('e', 2, new Torre(tab, Cor.Branca));
             colocarNovaPeca('e', 1, new Torre(tab, Cor.Branca));
-            colocarNovaPeca('d', 1, new Torre(tab, Cor.Branca));
+            colocarNovaPeca('d', 1, new Rei(tab, Cor.Branca));
 
             colocarNovaPeca('c', 7, new Torre(tab, Cor.Preta));
             colocarNovaPeca('c', 8, new Torre(tab, Cor.Preta));
             colocarNovaPeca('d', 7, new Torre(tab, Cor.Preta));
             colocarNovaPeca('e', 7, new Torre(tab, Cor.Preta));
             colocarNovaPeca('e', 8, new Torre(tab, Cor.Preta));
-            colocarNovaPeca('d', 8, new Torre(tab, Cor.Preta));
+            colocarNovaPeca('d', 8, new Rei(tab, Cor.Preta));
 
 
         }
 
         //Este método executa o momento da peça através dos parâmetros
         //de origem e destino
-        public void executaMovimento(Posicao origem, Posicao destino)
+        public Peca executaMovimento(Posicao origem, Posicao destino)
         {
             //retira a peça da origem
             Peca p = tab.retirarPeca(origem);
@@ -73,7 +75,24 @@ namespace xadrez
             {
                 capturadas.Add(pecaCapturada); //se capturou uma peça, insere no conjunto das peças capturadas
             }
+            return pecaCapturada;
         }
+
+        public void desfazMovimento(Posicao origem, Posicao destino, Peca pecaCapturada)
+        {
+            Peca p = tab.retirarPeca(destino);
+            p.decrementarQteMovimento();
+            //se teve uma peça capturada
+            if(pecaCapturada != null)
+            {
+                tab.colocarPeca(pecaCapturada, destino); //coloca a peça no destino
+                capturadas.Remove(pecaCapturada); //remove a peça do conjunto das peças capturadas
+            }
+            tab.colocarPeca(p, origem); //coloco a peça "p" de volta na posição de origem
+
+        }
+
+
         //método que retorna as peças capturadas separadas por cor
         public HashSet<Peca> pecasCapturadas(Cor cor)
         {
@@ -114,7 +133,23 @@ namespace xadrez
 
         public void realizaJogada(Posicao origem, Posicao destino)
         {
-            executaMovimento(origem, destino);
+            Peca pecaCapturada = executaMovimento(origem, destino);
+
+            if(estaEmXeque(jogadorAtual))
+            {
+                desfazMovimento(origem, destino, pecaCapturada);
+                throw new TabuleiroException("Você não pode se colocar em xeque.");
+            }
+
+            if(estaEmXeque(adversaria(jogadorAtual)))
+            {
+                xeque = true;
+            }
+            else
+            {
+                xeque = false;
+            }
+
             turno++;
             mudaJogador();
         }
@@ -140,11 +175,68 @@ namespace xadrez
 
         public void validaPosicaoDestino(Posicao origem, Posicao destino)
         {
-            //Se a posição de origem NÃO pode mover para a posição de origem
+            //Se a posição de origem NÃO pode mover para a posição de destino
             if (!tab.peca(origem).podeMoverPara(destino))
             {
                 throw new TabuleiroException("Posição de destino inválida.");
             }
+        }
+        //Método private pois somente será usada nesta classe
+        //Ela determina qual a cor é a adversária
+        private Cor adversaria (Cor cor)
+        {
+            if (cor == Cor.Branca)
+            {
+                return Cor.Preta;
+            }
+            else
+            {
+                return Cor.Branca;
+            }
+        }
+
+        private Peca rei(Cor cor)
+        {
+            //percorre o conjunto pecasEmJogo para saber quem é o rei da cor
+            foreach(Peca x in pecasEmJogo(cor))
+            {
+                //palavra "is"
+                //Peca é uma superclasse e Rei, Torre, Bispo, etc, são subclasses
+                //Para testar se a variável "x" do tipo da superclasse Peca
+                //é uma instancia de uma subclasse (neste caso: Rei), então usa-se a palavra "is"
+                if(x is Rei)
+                {
+                    return x;
+                }
+            }
+            return null;
+        }
+        
+        //método que retorna todos os movimentos possiveis
+        public bool estaEmXeque(Cor cor)
+        {
+            Peca R = rei(cor); //variável R recebe o rei da cor informada
+
+            //se R for nulo, não existe Rei
+            if(R == null) 
+            {
+                throw new TabuleiroException("Não tem rei da cor " + cor + " no tabuleiro.");
+            }
+
+            //Para cada peça adversária
+            foreach (Peca x in pecasEmJogo(adversaria(cor))) 
+            {
+                bool[,] mat = x.movimentosPossiveis(); //pego todos os movimentos possíveis da peça adversária
+
+                //Se a matrix na posição da peça adversária
+                //estiver dentro da posição do rei
+                //significa que o rei está em xeque
+                if(mat[R.posicao.Linha, R.posicao.Coluna])
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         //método será usado somente nesta classe
