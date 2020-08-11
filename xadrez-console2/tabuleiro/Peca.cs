@@ -34,7 +34,7 @@ namespace tabuleiro
         }
         //Diz se pode mover para uma determinada posição
         //se a posição pos é um movimento possivel
-        public bool podeMoverPara(Posicao pos)
+        public bool movimentoPossivel(Posicao pos)
         {
             return movimentosPossiveis()[pos.Linha, pos.Coluna];
         }
