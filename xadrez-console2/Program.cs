@@ -61,6 +61,8 @@ namespace xadrez_console2
                     }
 
                 }
+                Console.Clear();
+                Tela.imprimirPartida(partida);
 
             }
             catch(Exception e)

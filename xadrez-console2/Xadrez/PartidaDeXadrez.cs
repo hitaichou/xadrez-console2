@@ -41,8 +41,8 @@ namespace xadrez
         private void colocarPecas()
         {
             //Adiciona as peças nas posições
-            
-            colocarNovaPeca('c', 1, new Torre(tab, Cor.Branca));
+
+            /*colocarNovaPeca('c', 1, new Torre(tab, Cor.Branca));
             colocarNovaPeca('c', 2, new Torre(tab, Cor.Branca));
             colocarNovaPeca('d', 2, new Torre(tab, Cor.Branca));
             colocarNovaPeca('e', 2, new Torre(tab, Cor.Branca));
@@ -54,8 +54,14 @@ namespace xadrez
             colocarNovaPeca('d', 7, new Torre(tab, Cor.Preta));
             colocarNovaPeca('e', 7, new Torre(tab, Cor.Preta));
             colocarNovaPeca('e', 8, new Torre(tab, Cor.Preta));
-            colocarNovaPeca('d', 8, new Rei(tab, Cor.Preta));
+            colocarNovaPeca('d', 8, new Rei(tab, Cor.Preta));*/
 
+            colocarNovaPeca('c', 1, new Torre(tab, Cor.Branca));
+            colocarNovaPeca('d', 1, new Rei(tab, Cor.Branca));
+            colocarNovaPeca('h', 7, new Torre(tab, Cor.Branca));
+
+            colocarNovaPeca('a', 8, new Rei(tab, Cor.Preta));
+            colocarNovaPeca('b', 8, new Torre(tab, Cor.Preta));
 
         }
 
@@ -149,9 +155,17 @@ namespace xadrez
             {
                 xeque = false;
             }
-
-            turno++;
-            mudaJogador();
+            
+            if(testeXequeMate(adversaria(jogadorAtual)))
+            {
+                terminada = true;
+            }
+            else
+            {
+                turno++;
+                mudaJogador();
+            }
+            
         }
 
         public void validarPosicaoOrigem(Posicao pos)
@@ -237,6 +251,38 @@ namespace xadrez
                 }
             }
             return false;
+        }
+
+        public bool testeXequeMate(Cor cor)
+        {
+            if(!estaEmXeque(cor))
+            {
+                return false;
+            }
+            foreach(Peca x in pecasEmJogo(cor)) //varro toda peça x no conjunto de peças em jogo da cor
+            {
+                bool[,] mat = x.movimentosPossiveis();
+                for(int i = 0; i < tab.linhas; i++)
+                {
+                    for(int j = 0; i < tab.colunas; i++)
+                    {
+                        if (mat[i,j]) //entro se for verdadeiro
+                        {
+                            Posicao origem = x.posicao;
+                            Posicao destino = new Posicao(i, j);
+                            Peca pecaCapturada = executaMovimento(origem, destino); //faço movimento da posição da peça para o destino
+                            bool testeXeque = estaEmXeque(cor); //checo se ainda está em xeque
+                            desfazMovimento(origem, destino, pecaCapturada); //desfaço o movimento
+                            if(!testeXeque)
+                            {
+                                return false; //se entrar aqui é porque não está mais em xeque
+                            }
+                        }
+                    }
+                }
+            }
+            return true; //se todos os testes derem errado, é porque não há mais alternativas.
+
         }
 
         //método será usado somente nesta classe
