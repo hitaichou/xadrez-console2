@@ -45,9 +45,9 @@ namespace xadrez
             //BRANCAS
             colocarNovaPeca('a', 1, new Torre(tab, Cor.Branca));
             colocarNovaPeca('b', 1, new Cavalo(tab, Cor.Branca));
-            colocarNovaPeca('c', 1, new Bispo(tab, Cor.Branca));
+            colocarNovaPeca('c', 1, new Bispo(tab, Cor.Branca)); //bug
             colocarNovaPeca('d', 1, new Dama(tab, Cor.Branca));
-            colocarNovaPeca('e', 1, new Rei(tab, Cor.Branca));
+            colocarNovaPeca('e', 1, new Rei(tab, Cor.Branca, this));
             colocarNovaPeca('f', 1, new Bispo(tab, Cor.Branca));
             colocarNovaPeca('g', 1, new Cavalo(tab, Cor.Branca));
             colocarNovaPeca('h', 1, new Torre(tab, Cor.Branca));
@@ -65,7 +65,7 @@ namespace xadrez
             colocarNovaPeca('b', 8, new Cavalo(tab, Cor.Preta));
             colocarNovaPeca('c', 8, new Bispo(tab, Cor.Preta));
             colocarNovaPeca('d', 8, new Dama(tab, Cor.Preta));
-            colocarNovaPeca('e', 8, new Rei(tab, Cor.Preta));
+            colocarNovaPeca('e', 8, new Rei(tab, Cor.Preta, this));
             colocarNovaPeca('f', 8, new Bispo(tab, Cor.Preta));
             colocarNovaPeca('g', 8, new Cavalo(tab, Cor.Preta));
             colocarNovaPeca('h', 8, new Torre(tab, Cor.Preta));
@@ -96,6 +96,27 @@ namespace xadrez
             {
                 capturadas.Add(pecaCapturada); //se capturou uma peça, insere no conjunto das peças capturadas
             }
+
+            //#jogadaespecial RoquePequeno
+            if(p is Rei && destino.Coluna == origem.Coluna + 2) //se a peça é rei moveu duas casas para a direita, é roque
+            {
+                Posicao origemT = new Posicao(origem.Linha, origem.Coluna + 3); //pega a origem da torre
+                Posicao destinoT = new Posicao(origem.Linha, origem.Coluna + 1); //pego o destino da torre baseado no rei
+                Peca T = tab.retirarPeca(origemT); //movimento a torre
+                T.incrementarQteMovimento(); //incrementando novo movimento da torre
+                tab.colocarPeca(T, destinoT); //coloco a torre no destino
+            }
+            //#jogadaespecial RoqueGrande
+            if (p is Rei && destino.Coluna == origem.Coluna - 2)
+            {
+                Posicao origemT = new Posicao(origem.Linha, origem.Coluna - 4);
+                Posicao destinoT = new Posicao(origem.Linha, origem.Coluna - 1);
+                Peca T = tab.retirarPeca(origemT);
+                T.incrementarQteMovimento();
+                tab.colocarPeca(T, destinoT);
+            }
+
+
             return pecaCapturada;
         }
 
@@ -104,18 +125,36 @@ namespace xadrez
             Peca p = tab.retirarPeca(destino);
             p.decrementarQteMovimento();
             //se teve uma peça capturada
-            if(pecaCapturada != null)
+            if (pecaCapturada != null)
             {
                 tab.colocarPeca(pecaCapturada, destino); //coloca a peça no destino
                 capturadas.Remove(pecaCapturada); //remove a peça do conjunto das peças capturadas
             }
             tab.colocarPeca(p, origem); //coloco a peça "p" de volta na posição de origem
 
+            //#jogadaespecial RoquePequeno
+            if (p is Rei && destino.Coluna == origem.Coluna + 2) //se a peça é rei moveu duas casas para a direita, é roque
+            {
+                Posicao origemT = new Posicao(origem.Linha, origem.Coluna + 3); //pega a origem da torre
+                Posicao destinoT = new Posicao(origem.Linha, origem.Coluna + 1); //pego o destino da torre baseado no rei
+                Peca T = tab.retirarPeca(destinoT); //movimento a torre
+                T.decrementarQteMovimento(); //decrementando movimento da torre
+                tab.colocarPeca(T, origemT); //coloco a torre de volta na origem
+            }
+            //#jogadaespecial RoqueGrande
+            if (p is Rei && destino.Coluna == origem.Coluna - 2)
+            {
+                Posicao origemT = new Posicao(origem.Linha, origem.Coluna - 4);
+                Posicao destinoT = new Posicao(origem.Linha, origem.Coluna - 1);
+                Peca T = tab.retirarPeca(destinoT);
+                T.decrementarQteMovimento();
+                tab.colocarPeca(T, origemT);
+            }
         }
 
 
-        //método que retorna as peças capturadas separadas por cor
-        public HashSet<Peca> pecasCapturadas(Cor cor)
+            //método que retorna as peças capturadas separadas por cor
+            public HashSet<Peca> pecasCapturadas(Cor cor)
         {
             //declaro um conjunto temporário dentro deste método
             HashSet<Peca> aux = new HashSet<Peca>();

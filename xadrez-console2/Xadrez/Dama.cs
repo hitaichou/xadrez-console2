@@ -110,7 +110,7 @@ namespace xadrez
                 {
                     break; //forço a parada
                 }
-                //caso a situação acima não for verdade                
+                //caso a situação acima não for verdade                                
                 pos.definirValores(pos.Linha - 1, pos.Coluna - 1);
             }
 
@@ -126,7 +126,7 @@ namespace xadrez
                     break; //forço a parada
                 }
                 //caso a situação acima não for verdade                
-                pos.definirValores(pos.Linha - 1, pos.Coluna + 1);
+                pos.definirValores(pos.Linha - 1, pos.Coluna + 1);                
             }
 
             //SE
@@ -141,8 +141,8 @@ namespace xadrez
                 {
                     break; //forço a parada
                 }
-                //caso a situação acima não for verdade                
-                pos.definirValores(posicao.Linha + 1, posicao.Coluna + 1);
+                //caso a situação acima não for verdade                               
+                pos.definirValores(pos.Linha + 1, pos.Coluna + 1);
             }
 
             //SO
@@ -159,11 +159,8 @@ namespace xadrez
                 }
                 //caso a situação acima não for verdade
                 //posição coluna recebe -1
-                pos.definirValores(posicao.Linha + 1, posicao.Coluna - 1);
+                pos.definirValores(pos.Linha + 1, pos.Coluna - 1);
             }
-
-
-
             return mat;
         }
 

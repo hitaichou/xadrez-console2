@@ -34,13 +34,13 @@ namespace xadrez
             //NO
             pos.definirValores(posicao.Linha - 1, posicao.Coluna - 1);
 
-            
-            while (tab.posicaoValida(pos) && podeMover(pos))
+
+            while (tab.posicaoValida(pos) && podeMover(pos)) 
             {
                 mat[pos.Linha, pos.Coluna] = true;
                 //checa se a posição está nula ou se a cor
                 //da peça é a do adversário                
-                if (tab.peca(pos) != null && tab.peca(pos).cor != cor)
+                if (tab.peca(pos) != null && tab.peca(pos).cor != cor) 
                 {
                     break; //forço a parada
                 }
@@ -76,7 +76,7 @@ namespace xadrez
                     break; //forço a parada
                 }
                 //caso a situação acima não for verdade                
-                pos.definirValores(posicao.Linha + 1, posicao.Coluna + 1);
+                pos.definirValores(pos.Linha + 1, pos.Coluna + 1);
             }
 
             //SO
@@ -93,7 +93,7 @@ namespace xadrez
                 }
                 //caso a situação acima não for verdade
                 //posição coluna recebe -1
-                pos.definirValores(posicao.Linha + 1, posicao.Coluna - 1);
+                pos.definirValores(pos.Linha + 1, pos.Coluna - 1);
             }
             return mat;
         }
